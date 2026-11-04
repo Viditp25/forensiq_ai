@@ -1,5 +1,6 @@
+[readme (2).md](https://github.com/user-attachments/files/34395636/readme.2.md)
 # 🛡️ ForensiQ AI
-### Institutional Forensic Governance Platform
+### Autonomous Financial Forensics & Institutional Governance Platform
 
 > **Developer:** Vidit Palarpwar  
 
@@ -7,32 +8,30 @@
 
 ## 📖 Overview
 
-**ForensiQ AI** is an intelligent forensic financial audit platform that performs AI-assisted governance analysis on publicly available corporate information. The application combines financial market data, corporate PDF reports, semantic search, and a local large language model to generate structured financial risk assessments while ensuring complete data privacy.
+**ForensiQ AI** is an intelligent, institutional-grade forensic financial audit platform that combines rigorous tabular machine learning, unsupervised anomaly detection, network graph analysis, and local generative AI to evaluate corporate financial disclosures and detect financial distress.
 
-Unlike cloud-based AI audit platforms, ForensiQ AI executes entirely on a local machine. Sensitive corporate documents, embeddings, and inference remain offline, making it suitable for privacy-conscious financial analysis and academic research.
+Unlike cloud-based AI audit tools, ForensiQ AI executes entirely on local hardware (supported by local RTX GPUs and Ollama). Sensitive corporate documents, financial models, embeddings, and inference remain completely offline, ensuring privacy for financial research and auditing.
 
 The platform enables users to:
-
-- Analyze listed companies using stock ticker symbols
-- Upload annual reports, 10-K filings, or financial statements
-- Build a local semantic knowledge base from uploaded documents
-- Retrieve context using vector similarity search
-- Generate structured governance and risk reports using a local LLM
-- Operate without external AI APIs or cloud storage
+- Screen corporate financial ratio datasets against extreme class imbalance (~3.23% fraud/distress benchmarks).
+- Perform dimensionality reduction using **L1-Regularized LASSO** to extract core orthogonal forensic indicators from 95+ raw metrics.
+- Benchmark multiple machine learning paradigms (**XGBoost, Logistic Regression, Isolation Forest**) via leakage-free stratified pipelines.
+- Visualize corporate money-circulation and circular fund-routing networks using **NetworkX**.
+- Ingest unstructured corporate PDF reports (Annual Reports, IPO DRHP filings) using `pdfplumber`.
+- Run offline semantic vector search and local LLM inference (**Llama 3.1 8B**) governed by strict Pydantic schemas.
 
 ---
 
 # ✨ Features
 
-- 📄 Upload and analyze corporate PDF reports
-- 📈 Fetch live financial market information using stock tickers
-- 🧠 Semantic document retrieval using vector embeddings
-- 🤖 Offline AI-powered forensic financial auditing
-- 🔒 Fully local execution with no cloud dependency
-- 📊 Structured governance and risk scoring
-- 📑 Interactive audit reports
-- ⚡ Lightweight pure-Python vector database implementation
-- 🛠️ Deterministic JSON output with automatic recovery from malformed responses
+- 🤖 **5-Model Forensic Architecture:** Supervised probability classifiers, unsupervised isolation trees, linear residual checks, and network graph mining.
+- 📉 **L1-LASSO Feature Reduction:** Automatically eliminates multicollinearity, reducing 95 raw financial ratios down to core orthogonal indicators.
+- ⚖️ **Extreme Imbalance Handling:** Integrates SMOTE within strict `imblearn` cross-validation pipelines, prioritizing PR-AUC and ROC-AUC evaluation.
+- 🕸️ **Money-Circulation Graph Analysis:** Maps corporate fund transfers, equity infusions, and related-party transaction flows using `NetworkX`.
+- 📄 **Unstructured PDF Ingestion:** Extracts tables and text disclosures from corporate annual reports and IPO filings.
+- 🧠 **Offline Semantic Vector Search:** Custom pure-Python cosine similarity vector engine powered by `sentence-transformers`.
+- 🔒 **100% Local Execution:** Complete data privacy with zero cloud dependency or external API costs.
+- 🛠️ **Deterministic JSON Governance:** Pydantic validation schemas with automated malformed-response recovery loops.
 
 ---
 
@@ -47,14 +46,15 @@ The platform enables users to:
             ┌───────────────┼────────────────┐
             │                                │
             ▼                                ▼
-   Financial Data                   Corporate PDF
-      Retrieval                       Ingestion
+   Tabular ML Core                 Corporate PDF Reports
+   (XGBoost / LASSO)                (Annual Reports / DRHP)
             │                                │
+            ├────────────────┐               │
+            ▼                ▼               ▼
+     NetworkX Money     Isolation Forest  Text Extraction
+   Circulation Graph   Anomaly Detection   (pdfplumber)
+            │                │               │
             └───────────────┬────────────────┘
-                            ▼
-                  Text Extraction
-                    (pdfplumber)
-                            │
                             ▼
                  Sentence Embeddings
             (sentence-transformers)
@@ -62,9 +62,6 @@ The platform enables users to:
                             ▼
                Local Vector Database
           (Pure Python Cosine Similarity)
-                            │
-                            ▼
-                  Context Retrieval
                             │
                             ▼
                  Ollama Llama 3.1 (8B)
@@ -81,6 +78,8 @@ The platform enables users to:
 |------------|------------|
 | Frontend | Streamlit |
 | Language | Python 3.13+ |
+| Machine Learning | scikit-learn, XGBoost, imbalanced-learn (SMOTE) |
+| Network Analysis | NetworkX, Matplotlib |
 | PDF Parsing | pdfplumber |
 | Embedding Model | sentence-transformers (all-MiniLM-L6-v2) |
 | Local LLM | Ollama (Llama 3.1 8B) |
@@ -94,31 +93,23 @@ The platform enables users to:
 ```
 forensiq_ai/
 │
-├── main.py
-├── requirements.txt
-├── README.md
+├── main.py                  # Streamlit frontend application entry point
+├── requirements.txt         # Project dependency manifest
+├── README.md                # Documentation
+├── data.csv                 # Core corporate financial ratio dataset
 │
-├── assets/
+├── scaler.pkl               # Serialized StandardScaler artifact
+├── feature_selector.pkl     # Serialized L1-LASSO feature selector artifact
+├── forensic_ml_model.pkl    # Serialized supervised baseline model artifact
 │
-├── data/
-│   ├── uploaded_reports/
-│   └── vector_store/
-│
-├── models/
-│
-├── utils/
-│   ├── parser.py
-│   ├── embeddings.py
-│   ├── vector_db.py
-│   ├── audit_engine.py
-│   └── llm.py
-│
-└── pages/
+├── assets/                  # Visualizations and exported charts
+├── core/                    # Core ML, graph analysis, and parser modules
+└── utils/                   # Embedding, vector DB, and LLM governance utilities
 ```
 
 ---
 
-# 🚀 Installation
+# 🚀 Installation & Setup
 
 ## 1. Clone the Repository
 
@@ -135,6 +126,10 @@ cd forensiq_ai
 ```bash
 python -m pip install \
 streamlit \
+scikit-learn \
+xgboost \
+imbalanced-learn \
+networkx \
 sentence-transformers \
 requests \
 pydantic \
@@ -146,17 +141,15 @@ torchvision \
 
 ---
 
-## 3. Start the Local LLM
+## 3. Start the Local LLM (Optional for Phase 2 AI Summaries)
 
-Install Ollama if it is not already installed.
-
-Pull the model:
+Install Ollama and pull the required model:
 
 ```bash
 ollama pull llama3.1:8b
 ```
 
-Run the model:
+Run Ollama locally:
 
 ```bash
 ollama run llama3.1:8b
@@ -180,189 +173,29 @@ http://localhost:8501
 
 ---
 
-# 📊 How to Use
+# 📊 5-Model Forensic Pipeline Breakdown
 
-## Step 1 — Enter a Stock Ticker
-
-Provide a valid equity ticker in the sidebar.
-
-Examples:
-
-- TCS
-- INFY
-- RELIANCE
-- PATELENG
-
----
-
-## Step 2 — Upload Financial Reports *(Optional)*
-
-Upload one or more corporate documents such as:
-
-- Annual Reports
-- 10-K Filings
-- Quarterly Reports
-- Investor Presentations
-
-The uploaded PDFs are parsed and indexed into the local semantic vector database.
-
----
-
-## Step 3 — Execute the Audit
-
-Click:
-
-```
-Execute Comprehensive Financial Audit
-```
-
-The system will:
-
-1. Retrieve financial metrics
-2. Extract relevant document sections
-3. Perform semantic similarity search
-4. Generate structured governance insights using the local LLM
-5. Display an interactive financial risk assessment
-
----
-
-# ⚙️ Audit Pipeline
-
-```
-User Input
-     │
-     ▼
-Ticker + PDF
-     │
-     ▼
-Financial Data Collection
-     │
-     ▼
-PDF Text Extraction
-     │
-     ▼
-Embedding Generation
-     │
-     ▼
-Vector Similarity Search
-     │
-     ▼
-Context Assembly
-     │
-     ▼
-Llama 3.1 (Offline)
-     │
-     ▼
-JSON Audit Report
-     │
-     ▼
-Interactive Dashboard
-```
-
----
-
-# 🧠 Core Components
-
-## Financial Data Ingestion
-
-Retrieves market information associated with the selected stock ticker to provide contextual financial indicators for analysis.
-
----
-
-## Document Processing
-
-Corporate reports are parsed using **pdfplumber**, segmented into manageable chunks, and transformed into semantic embeddings.
-
----
-
-## Semantic Vector Engine
-
-A lightweight custom vector database built entirely in Python performs cosine similarity calculations for context retrieval without external vector database dependencies.
-
----
-
-## Local AI Inference
-
-Relevant document context is supplied to an offline **Llama 3.1 8B** model running through Ollama to generate deterministic governance assessments.
+1. **L1-LASSO Feature Selection:** Drives redundant financial ratio coefficients to zero, retaining top orthogonal risk indicators.
+2. **Supervised Probability Classifiers (`P_ML`):** Benchmarks class-weighted Logistic Regression and XGBoost trained on SMOTE-resampled training folds.
+3. **Unsupervised Anomaly Detection:** Utilizes Isolation Forest to isolate structural outliers without relying entirely on historical fraud labels.
+4. **Linear Residual Modeling (`R_Norm`):** Validates cross-statement accounting consistency (e.g., matching liability ratios against expected operational returns).
+5. **Money-Circulation Network Analysis (`S_Graph`):** Constructs directed graphs via `NetworkX` to detect circular routing and related-party fund transfer anomalies.
 
 ---
 
 # 🔒 Privacy
 
-ForensiQ AI is designed with privacy as a core principle.
-
-- No cloud AI services
-- No external document storage
+ForensiQ AI is designed with privacy as a core principle:
+- No cloud AI services or external document storage
 - No API-based LLM inference
-- Local vector database
-- Offline document processing
+- Local vector database and offline document processing
 - Offline language model execution
-
-All processing remains on the user's machine.
-
----
-
-# 💡 Key Design Decisions
-
-### Pure Python Vector Database
-
-A custom cosine similarity implementation replaces traditional vector databases, improving compatibility with Python 3.13 while avoiding native binary dependencies.
-
----
-
-### Deterministic LLM Prompting
-
-The audit engine applies fixed system instructions and constrained scoring logic to improve consistency and reduce hallucinations.
-
----
-
-### JSON Recovery Layer
-
-A post-processing module automatically repairs malformed JSON responses generated by quantized local models, ensuring reliable rendering within the Streamlit interface.
-
----
-
-# 📌 Future Enhancements
-
-- Multi-document knowledge graph
-- Comparative company benchmarking
-- Financial trend visualization
-- Historical audit tracking
-- Automated anomaly detection
-- Multi-model local inference support
-- Export reports as PDF
-- RAG optimization with hybrid search
-
----
-
-# 📷 Screenshots
-
-Add screenshots of the following:
-
-- Dashboard
-- PDF Upload
-- Audit Report
-- Risk Analysis
-- Governance Summary
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome.
-
-To contribute:
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Open a pull request
 
 ---
 
 # 📄 License
 
-This project is intended for educational and research purposes.
+This project is intended for educational, analytical, and research purposes.
 
 ---
 
