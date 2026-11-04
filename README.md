@@ -1,4 +1,3 @@
-[readme (2).md](https://github.com/user-attachments/files/34395636/readme.2.md)
 # 🛡️ ForensiQ AI
 ### Autonomous Financial Forensics & Institutional Governance Platform
 
